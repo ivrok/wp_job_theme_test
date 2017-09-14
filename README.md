@@ -1,2 +1,3 @@
 # wp_job_theme_test
-Got this task to be applied on a new job.
+I got this task to be passed on a new job.
+
