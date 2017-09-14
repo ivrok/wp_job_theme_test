@@ -41,21 +41,24 @@ function true_option_page(){
  */
 function true_option_settings() {
     global $true_page;
-    // Присваиваем функцию валидации ( true_validate_settings() ). Вы найдете её ниже
+
     register_setting( 'true_options', 'true_options', 'true_validate_settings' ); // true_options
 
     // Добавляем секцию
     add_settings_section( 'background_section', 'Background', '', $true_page );
 
+    $callBack = 'true_option_display_settings';
     // Создадим текстовое поле в первой секции
-    $true_field_params = array(
-        'type'      => 'text', // тип
-        'id'        => 'my_text',
-        'desc'      => 'Пример обычного текстового поля.', // описание
-        'label_for' => 'my_text', // позволяет сделать название настройки лейблом (если не понимаете, что это, можете не использовать), по идее должно быть одинаковым с параметром id
-        'placeholder' => 'test'
-    );
-    add_settings_field( 'my_text_field', 'Текстовое поле', 'true_option_display_settings', $true_page, 'background_section', $true_field_params );
+    inc\classes\WpAdminInputs::instance()
+        ->textInput()
+        ->id('background-color')
+        ->desc(__('set background color'))
+        ->label_for('background-color')
+        ->section('background_section')
+        ->callback($callBack)
+        ->page($true_page)
+        ->add();
+//    add_settings_field( '', 'Background color', 'true_option_display_settings', $true_page, 'background_section', $true_field_params );
 
     // Создадим textarea в первой секции
     $true_field_params = array(

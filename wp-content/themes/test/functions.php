@@ -128,7 +128,10 @@ function test_scripts() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'test_scripts' );
-
+/**
+ * Autoloader
+ */
+require get_template_directory() . '/inc/autoloader.php';
 /**
  * Implement the Custom Header feature.
  */
