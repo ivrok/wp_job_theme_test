@@ -52,7 +52,8 @@ function true_option_settings() {
         'type'      => 'text', // тип
         'id'        => 'my_text',
         'desc'      => 'Пример обычного текстового поля.', // описание
-        'label_for' => 'my_text' // позволяет сделать название настройки лейблом (если не понимаете, что это, можете не использовать), по идее должно быть одинаковым с параметром id
+        'label_for' => 'my_text', // позволяет сделать название настройки лейблом (если не понимаете, что это, можете не использовать), по идее должно быть одинаковым с параметром id
+        'placeholder' => 'test'
     );
     add_settings_field( 'my_text_field', 'Текстовое поле', 'true_option_display_settings', $true_page, 'background_section', $true_field_params );
 
@@ -72,7 +73,7 @@ function true_option_settings() {
     $true_field_params = array(
         'type'      => 'checkbox',
         'id'        => 'my_checkbox',
-        'desc'      => 'Пример чекбокса.'
+        'desc'      => 'Пример чекбокса.',
     );
     add_settings_field( 'my_checkbox_field', 'Чекбокс', 'true_option_display_settings', $true_page, 'true_section_2', $true_field_params );
 
