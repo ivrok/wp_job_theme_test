@@ -52,4 +52,10 @@ function test_customize_partial_blogdescription() {
 function test_customize_preview_js() {
 	wp_enqueue_script( 'test-customizer', get_template_directory_uri() . '/js/customizer.js', array( 'customize-preview' ), '20151215', true );
 }
+
 add_action( 'customize_preview_init', 'test_customize_preview_js' );
+
+
+add_action( 'wp_enqueue_scripts', function(){
+    wp_enqueue_script("jquery");
+});

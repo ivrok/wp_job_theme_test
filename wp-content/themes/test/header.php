@@ -18,6 +18,27 @@
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 
 	<?php wp_head(); ?>
+    <?
+    $logo = getLogo();
+    $logoR = getLogoRetina();
+    $headColor = getHeadBGColor();
+    $headImage = getHeadBGImage();
+    ?>
+    <style>
+        header {
+            <? if ($headColor) :?> background-color: <?=$headColor;?>;<?endif;?>
+            <? if ($headImage) :?> background-image: url(<?=$headImage;?>);<?endif;?>
+        }
+        #logo {
+            <?=$logo ? 'background-image: url(' . $logo . ');' : ''?>
+        }
+        @media only screen and (min--moz-device-pixel-ratio: 2),
+        only screen and (-o-min-device-pixel-ratio: 2/1),
+        only screen and (-webkit-min-device-pixel-ratio: 2),
+        only screen and (min-device-pixel-ratio: 2) {
+            <?=$logoR ? 'background-image: url(' . $logoR . ');' : ''?>
+        }
+    </style>
 </head>
 
 <body <?php body_class(); ?>>
@@ -26,13 +47,10 @@
 
 	<header id="masthead" class="site-header">
         <div >
-            <div id="logo" class="header-left">
-                <h1>LOGO HERE</h1>
-                <?php
-                the_custom_logo();
-                ?>
+            <div class="header-top header-left">
+                <div id="logo"></div>
             </div>
-            <div id="header-widget" class="widget header-right">
+            <div id="header-widget" class="header-top widget header-right">
                 <?get_sidebar('header-widget');
                 ?>
             </div>

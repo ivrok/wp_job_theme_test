@@ -1,0 +1,7 @@
+
+.inputWrapper .Logo, .inputWrapper .LogoUrl {
+    display: block;
+}
+.inputWrapper .LogoUrl {
+    border: 1px solid;
+}

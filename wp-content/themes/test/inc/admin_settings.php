@@ -5,160 +5,138 @@
  * Date: 14.09.2017
  * Time: 16:13
  */
-$true_page = 'themeparametrs.php';
-
-/*
- * Function add menu item to admin panel
- */
-function true_options() {
-    global $true_page;
-    add_options_page( __('> Settings'), __('Settings'), 'manage_options', $true_page, 'true_option_page');
-}
-add_action('admin_menu', 'true_options');
 
 /**
- * Function callback which one render page after click on our menu item
+ * Add js and css
  */
-function true_option_page(){
-    global $true_page;
-    ?><div class="wrap">
-    <h2>Дополнительные параметры сайта</h2>
-    <form method="post" enctype="multipart/form-data" action="options.php">
-        <?php
-        settings_fields('true_options'); // меняем под себя только здесь (название настроек)
-        do_settings_sections($true_page);
-        ?>
-        <p class="submit">
-            <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
-        </p>
-    </form>
-    </div><?php
-}
-
-/*
- * Register settings
- * I will call my settings true_options
- */
-function true_option_settings() {
-    global $true_page;
-
-    register_setting( 'true_options', 'true_options', 'true_validate_settings' ); // true_options
-
-    // Добавляем секцию
-    add_settings_section( 'background_section', 'Background', '', $true_page );
-
-    $callBack = 'true_option_display_settings';
-    // Создадим текстовое поле в первой секции
-    inc\classes\WpAdminInputs::instance()
-        ->textInput()
-        ->id('background-color')
-        ->desc(__('set background color'))
-        ->label_for('background-color')
-        ->section('background_section')
-        ->callback($callBack)
-        ->page($true_page)
-        ->add();
-//    add_settings_field( '', 'Background color', 'true_option_display_settings', $true_page, 'background_section', $true_field_params );
-
-    // Создадим textarea в первой секции
-    $true_field_params = array(
-        'type'      => 'textarea',
-        'id'        => 'my_textarea',
-        'desc'      => 'Пример большого текстового поля.'
-    );
-    add_settings_field( 'my_textarea_field', 'Большое текстовое поле', 'true_option_display_settings', $true_page, 'true_section_1', $true_field_params );
-
-    // Добавляем вторую секцию настроек
-
-    add_settings_section( 'true_section_2', 'Другие поля ввода', '', $true_page );
-
-    // Создадим чекбокс
-    $true_field_params = array(
-        'type'      => 'checkbox',
-        'id'        => 'my_checkbox',
-        'desc'      => 'Пример чекбокса.',
-    );
-    add_settings_field( 'my_checkbox_field', 'Чекбокс', 'true_option_display_settings', $true_page, 'true_section_2', $true_field_params );
-
-    // Создадим выпадающий список
-    $true_field_params = array(
-        'type'      => 'select',
-        'id'        => 'my_select',
-        'desc'      => 'Пример выпадающего списка.',
-        'vals'		=> array( 'val1' => 'Значение 1', 'val2' => 'Значение 2', 'val3' => 'Значение 3')
-    );
-    add_settings_field( 'my_select_field', 'Выпадающий список', 'true_option_display_settings', $true_page, 'true_section_2', $true_field_params );
-
-    // Создадим радио-кнопку
-    $true_field_params = array(
-        'type'      => 'radio',
-        'id'      => 'my_radio',
-        'vals'		=> array( 'val1' => 'Значение 1', 'val2' => 'Значение 2', 'val3' => 'Значение 3')
-    );
-    add_settings_field( 'my_radio', 'Радио кнопки', 'true_option_display_settings', $true_page, 'true_section_2', $true_field_params );
-
-}
-add_action( 'admin_init', 'true_option_settings' );
-
-/*
- * Function to render input fields
- */
-function true_option_display_settings($args) {
-    extract( $args );
-
-    $option_name = 'true_options';
-
-    $o = get_option( $option_name );
-
-    switch ( $type ) {
-        case 'text':
-            $o[$id] = esc_attr( stripslashes($o[$id]) );
-            echo "<input class='regular-text' type='text' id='$id' name='" . $option_name . "[$id]' value='$o[$id]' />";
-            echo ($desc != '') ? "<br /><span class='description'>$desc</span>" : "";
-            break;
-        case 'textarea':
-            $o[$id] = esc_attr( stripslashes($o[$id]) );
-            echo "<textarea class='code large-text' cols='50' rows='10' type='text' id='$id' name='" . $option_name . "[$id]'>$o[$id]</textarea>";
-            echo ($desc != '') ? "<br /><span class='description'>$desc</span>" : "";
-            break;
-        case 'checkbox':
-            $checked = ($o[$id] == 'on') ? " checked='checked'" :  '';
-            echo "<label><input type='checkbox' id='$id' name='" . $option_name . "[$id]' $checked /> ";
-            echo ($desc != '') ? $desc : "";
-            echo "</label>";
-            break;
-        case 'select':
-            echo "<select id='$id' name='" . $option_name . "[$id]'>";
-            foreach($vals as $v=>$l){
-                $selected = ($o[$id] == $v) ? "selected='selected'" : '';
-                echo "<option value='$v' $selected>$l</option>";
-            }
-            echo ($desc != '') ? $desc : "";
-            echo "</select>";
-            break;
-        case 'radio':
-            echo "<fieldset>";
-            foreach($vals as $v=>$l){
-                $checked = ($o[$id] == $v) ? "checked='checked'" : '';
-                echo "<label><input type='radio' name='" . $option_name . "[$id]' value='$v' $checked />$l</label><br />";
-            }
-            echo "</fieldset>";
-            break;
-    }
-}
-
-/*
- * Function fieds value validation
- */
-function true_validate_settings($input) {
-    foreach($input as $k => $v) {
-        $valid_input[$k] = trim($v);
-
-        /* Вы можете включить в эту функцию различные проверки значений, например
-        if(! задаем условие ) { // если не выполняется
-            $valid_input[$k] = ''; // тогда присваиваем значению пустую строку
+add_action( 'admin_enqueue_scripts',
+    function() {
+        if ( ! did_action( 'wp_enqueue_media' ) ) {
+            wp_enqueue_media();
         }
-        */
+        wp_enqueue_style( 'admin_settings', get_template_directory_uri() . '/layouts/admin_settings.css', false, '1.0.0' );
+
+        wp_enqueue_script( 'color_picker', get_stylesheet_directory_uri() . '/js/jquery.colorpicker.min.js', array('jquery'), null, false );
+        wp_enqueue_script( 'admin_settings', get_stylesheet_directory_uri() . '/js/admin_settings.js', array('jquery'), null, false );
     }
-    return $valid_input;
+);
+
+
+
+function add_theme_menu_item()
+{
+    add_menu_page("Theme Panel", "Theme Panel", "manage_options", "theme-panel", "theme_settings_page", null, 99);
 }
+
+add_action("admin_menu", "add_theme_menu_item");
+
+function theme_settings_page()
+{
+    ?>
+    <div class="wrap">
+        <h1>Theme Panel</h1>
+        <form method="post" action="options.php" enctype="multipart/form-data">
+            <?php
+            settings_fields("section");
+            do_settings_sections("theme-options");
+            submit_button();
+            ?>
+        </form>
+    </div>
+    <?php
+}
+function logo_display()
+{
+    $logo = get_option('LogoUrl');
+    ?>
+    <div class="inputWrapper">
+        <? if ($logo) :?>
+            <img id="LogoUrl" class="LogoUrl" width=200 src="<?=$logo;?>">
+        <? endif;?>
+        <input id="Logo" class="Logo" type="file" name="Logo" />
+        <input name="deleteLogo" type="submit" value="Delete logo">
+    </div>
+<?
+}
+function logoR_display()
+{
+    $logo = get_option('LogoRUrl');
+    ?>
+    <div class="inputWrapper">
+        <? if ($logo) :?>
+            <img id="LogoRUrl" class="LogoUrl" width=200 src="<?=$logo;?>">
+        <? endif;?>
+        <input id="LogoR" class="Logo" type="file" name="LogoR" />
+        <input name="deleteLogoR" type="submit" value="Delete logo">
+    </div>
+    <?
+}
+function bgimage_display()
+{
+    $img = get_option('headbgimageUrl');
+    ?>
+    <div class="inputWrapper">
+        <? if ($img) :?>
+            <img id="headbgimageUrl" class="LogoUrl" width=200 src="<?=$img;?>">
+        <? endif;?>
+        <input id="headbgimage" class="Logo" type="file" name="headbgimage" />
+        <input name="deleteheadbgimage" type="submit" value="Delete image">
+    </div>
+    <?
+}
+function bgcolor_display(){
+    $bgcolor = get_option('headbgcolor');
+    ?>
+    <label for="headbgcolor"><input type="text" id="headbgcolor" name="headbgcolor" value="<?=$bgcolor;?>"></label>
+    <?
+}
+function headFixed_display(){
+    $check = get_option('headFixed');
+    ?>
+    <label for="headFixed"><input type="checkbox" id="headFixed" name="headFixed" <?=$check ? 'checked' : '';?>></label>
+    <?
+}
+function handle_logo(){//sorry for copy paste
+    if (!empty($_FILES["Logo"]["tmp_name"]) || !empty($_FILES["LogoR"]["tmp_name"])) {
+        $letter = empty($_FILES["Logo"]["tmp_name"]) ? 'R' : '';
+        $res = wp_handle_upload($_FILES["Logo" . $letter], array('test_form' => FALSE));
+        update_option('Logo' . $letter . 'Url', $res['url']);
+        update_option('Logo' . $letter . 'Path', $res['file']);
+        return $res;
+    }
+    if (!empty($_FILES["headbgimage"]["tmp_name"])) {
+        $res = wp_handle_upload($_FILES["headbgimage"], array('test_form' => FALSE));
+        update_option('headbgimageUrl', $res['url']);
+        update_option('headbgimagePath', $res['file']);
+        return $res;
+    }
+
+    if (isset($_REQUEST['deleteLogo']) || isset($_REQUEST['deleteLogoR'])) {
+        $letter = isset($_REQUEST['deleteLogo']) ? '' : 'R';
+        update_option('Logo' . $letter . 'Url', '');
+        update_option('Logo' . $letter . 'Path', '');
+    }
+    if (isset($_REQUEST['deleteheadbgimage'])) {
+        update_option('headbgimageUrl', '');
+        update_option('headbgimagePath', '');
+    }
+    return false;
+}
+function display_theme_panel_fields()
+{
+    add_settings_section("BackgroundSection", "Header background", null, "theme-options");
+    add_settings_field("headbgcolor", "color", "bgcolor_display", "theme-options", "BackgroundSection");
+    add_settings_field("headbgimage", "image", "bgimage_display", "theme-options", "BackgroundSection");
+    register_setting('section', 'headbgcolor');
+
+    add_settings_section("LogoSection", "Logo", null, "theme-options");
+    add_settings_field("logo", "Logo", "logo_display", "theme-options", "LogoSection");
+    add_settings_field("logoR", "Logo Retina", "logoR_display", "theme-options", "LogoSection");
+    register_setting("section", "Logo", "handle_logo");
+
+    add_settings_section("AnotherSection", "Another options", null, "theme-options");
+    add_settings_field("headFixed", "Fixed header", "headFixed_display", "theme-options", "AnotherSection");
+    register_setting('section', 'headFixed');
+}
+
+add_action("admin_init", "display_theme_panel_fields");

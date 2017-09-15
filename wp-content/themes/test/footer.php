@@ -30,5 +30,21 @@
 
 <?php wp_footer(); ?>
 
+<? if (isHeaderFixed()) : ?>
+    <script>
+        //if the option fixed header has chosen
+        jQuery(function($){
+//            $(window).scroll(function(){
+//                var sticky = $('header'),
+//                    scroll = $(window).scrollTop();
+//
+//                if (scroll >= $('header').height() / 2) sticky.addClass('fixed');
+//                else sticky.removeClass('fixed');
+//            });
+            $("header").sticky({topSpacing:0});
+        });
+    </script>
+<? endif; ?>
+<script src="<?=get_template_directory_uri();?>/js/jquery.sticky.js"></script>
 </body>
 </html>

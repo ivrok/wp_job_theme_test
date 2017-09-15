@@ -859,7 +859,10 @@ body {
     background-color: #ccc;
 }
 header {
-    width: 100%;
+    width:100%;
+    background-size: 100% 100%;
+    background-color: rgb(109, 37, 37);
+    background-repeat: no-repeat;
 }
 .header-left {
     width: 69%;
@@ -880,4 +883,18 @@ nav#site-navigation {
 .menu-item > a {
     color: white;
     font-weight: bold;
+}
+.header-top {
+    height: 200px;
+    overflow: hidden;
+}
+div#logo {
+    height: 100%;
+    width: 100%;
+    background-size: 100% 100%;
+}
+.fixed {
+    position: fixed;
+    top:0; left:0;
+    width: 100%;
 }
